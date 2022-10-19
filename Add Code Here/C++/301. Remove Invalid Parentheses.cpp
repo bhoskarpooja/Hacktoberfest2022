@@ -18,67 +18,61 @@ Input: s = ")("
 Output: [""]
 
 -----------------------
-
-class Solution {
+class Remove_para {
 public:
-    set<string> v;
-    int mx=0;
-    void fnd(string s){
-        string cur=s;   
-        stack<char> st;
-        int cnt=0;
-        for(auto x:cur){
-            if(x=='(') st.push(x);
-            else if(x==')'){
-                if(st.size()) st.pop();
-                else cnt++;
+    
+    vector<string> res;
+    unordered_map<string,int> mp;
+    
+    int getInValid(string s)
+    {
+        stack<char> stck;
+        int i = 0;
+        while(i < s.size())
+        {
+            if(s[i] == '(')
+                stck.push('(');
+            else if(s[i] == ')')
+            {
+                if(stck.size() > 0 && stck.top() == '(')
+                    stck.pop();
+                else
+                    stck.push(')');
             }
+            i++;
         }
-        mx=cnt+st.size();
-        mx=s.length()-mx;
+        return stck.size();
     }
     
-    void solve(int pos,string& cur,string& s){
-        // base condition
-        if(pos==s.length()){
-            if(cur.size()==0) return;
-            if(cur.size()!=mx) return;
-            
-            stack<char> st;
-            for(auto x:cur){
-                if(x=='(') st.push(x);
-                else if(x==')'){
-                    if(st.size()) st.pop();
-                    else return;
-                }
-            }
-            if(!st.size()){
-                v.insert(cur);
-            }
+    void solution(string s,int minInv){
+
+        if(mp[s] != 0) 
+            return;
+        else
+            mp[s]++; //mp[s] = 1
+        //base case
+        if(minInv < 0){
             return;
         }
-        if(s.length()-pos+cur.length()<mx) return;
+        if(minInv == 0)
+        {
+            if(!getInValid(s))
+                res.push_back(s);
+            return;
+        }
         
-        if(s[pos]!='(' and s[pos]!=')'){
-            cur+=s[pos];
-            solve(pos+1,cur,s);
-            cur.pop_back();
+        for(int i=0; i<s.size(); i++)
+        {
+            string left = s.substr(0,i);
+            string right = s.substr(i+1);
+            solution(left+right, minInv-1);
         }
-        else{
-            solve(pos+1,cur,s);
-            cur+=s[pos];
-            solve(pos+1,cur,s);
-            cur.pop_back();
-        }
+        return;
     }
-    vector<string> removeInvalidParentheses(string s) {
-        string tmp="";
-        fnd(s);
-        vector<string> ans;
-        
-        solve(0,tmp,s);
-        for(auto x:v) ans.push_back(x);
-        if(ans.size()==0) ans.push_back("");
-        return ans;
+    
+    vector<string> removeInvalidParentheses(string s) 
+    {
+        solution(s, getInValid(s));
+        return res;
     }
 };
