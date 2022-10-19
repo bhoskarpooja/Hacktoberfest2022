@@ -1,39 +1,28 @@
-using System;
-					
-public class Program
+using System;  
+public class PalindromeNumber
+{  
+    public static void Main()
 {
-	public static void Main()
-	{
-		    string initial = "";
-		    
-		    Console.WriteLine("Enter a String to check for Palindrome");
- 
-            string input = Console.ReadLine();
- 
-            int iLength = input.Length;
- 
-		    //check if string length is not 0, basically if it is not empty
-            if (iLength == 0)
-            {
-                Console.WriteLine("You did not enter the string");
- 
-            }
-            else
-            { 
-                for (int j = iLength - 1; j >= 0; j--)
-                {
-                    initial = initial + input[j];
-                }				
- 				//if initial string is same as input
-                if (initial == input)
-                {
-                    Console.WriteLine(input + " is palindrome");
-                }
-                else
-                {
-                    Console.WriteLine(input + " is not a palindrome");
-                }
-             
-            }
-	}
+    int num,r,sum=0,t,rev;
+	
+    Console.WriteLine("\n Check whether a number is a palindrome or not:\n");
+    Console.WriteLine("Input a number: ");
+    num = Convert.ToInt32(Console.ReadLine()); 	
+	    
+    rev = num/10;
+    for(t=num;num!=0;rev)
+    {
+         r=num % 10;
+         sum=sum*10+r;
+    }
+    if(t==sum)
+    {
+         Console.WriteLine("{0} is a palindrome number.\n",t);
+    }
+    else
+    {
+         Console.WriteLine("{0} is not a palindrome number.\n",t);
+    }
+
+    }	 
 }
